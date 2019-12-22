@@ -225,8 +225,9 @@ function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
  * 'rotator' => 'rotator'
  * 'noon' => 'noon'
  */
-function reverseString(/* str */) {
-  throw new Error('Not implemented');
+function reverseString(str) {
+  if (str === '') return '';
+  return reverseString(str.substr(1)) + str.charAt(0);
 }
 
 
@@ -242,8 +243,12 @@ function reverseString(/* str */) {
  *   87354 => 45378
  *   34143 => 34143
  */
-function reverseInteger(/* num */) {
-  throw new Error('Not implemented');
+function reverseInteger(num) {
+  let number;
+  if (typeof num !== 'string') {
+    number = num.toString();
+  }
+  return reverseString(number.substr(1)) + number.charAt(0);
 }
 
 
@@ -267,8 +272,15 @@ function reverseInteger(/* num */) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  const res = String(ccn)
+    .split('')
+    .reverse()
+    .map((x) => parseInt(x, 10))
+    .map((x, ind) => (ind % 2 ? x * 2 : x))
+    .map((x) => (x > 9 ? (x % 10) + 1 : x))
+    .reduce((acc, x) => acc + x) % 10;
+  return res === 0;
 }
 
 /**
@@ -285,8 +297,9 @@ function isCreditCardNumber(/* ccn */) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+function getDigitalRoot(num) {
+  const res = String(num).split('').map((x) => parseInt(x, 10)).reduce((acc, x) => acc + x);
+  return res > 9 ? getDigitalRoot(res) : res;
 }
 
 
@@ -336,8 +349,8 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  return num.toString(n);
 }
 
 
@@ -353,8 +366,23 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  const pathesArr = pathes.map((path) => path.split('/'));
+  function compare(i) {
+    return pathesArr.every((dir) => {
+      const ref = pathesArr[0][i];
+      return ref === dir[i];
+    });
+  }
+
+  let i = 0;
+  let res = '';
+  while (compare(i)) {
+    res += `${pathesArr[0][i]}/`;
+    i += 1;
+  }
+
+  return res;
 }
 
 
